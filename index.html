@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oxente Receitas — Culinária Nordestina</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --clay:#B84A1E;--clay-dark:#7A2E0E;--clay-pale:#F0C4A8;
+  --sand:#F5ECD9;--sand-dark:#E8D9BF;
+  --ink:#1C1008;--ink-mid:#4A3020;--ink-muted:#8C6A50;
+  --cream:#FDFAF4;--gold:#C8902A;--gold-light:#E8B84A;
+  --white:#FFFFFF;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--sand)}
+::-webkit-scrollbar-thumb{background:var(--clay);border-radius:3px}
+
+/* ══ MODAL ══ */
+.overlay{display:none;position:fixed;inset:0;background:rgba(28,16,8,.75);backdrop-filter:blur(6px);z-index:900;align-items:center;justify-content:center;padding:1rem}
+.overlay.open{display:flex}
+.modal{background:var(--cream);border-radius:3px;width:100%;max-width:430px;border-top:3px solid var(--clay);position:relative;animation:mup .22s ease;overflow:hidden}
+@keyframes mup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.modal-hd{background:var(--clay-dark);padding:1.75rem 2rem 1.5rem;text-align:center;position:relative}
+.modal-hd-logo{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:.4rem}
+.modal-hd-logo svg{width:34px;height:34px}
+.modal-hd h2{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#fff;letter-spacing:.02em}
+.modal-hd p{font-size:.75rem;color:rgba(255,255,255,.55);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
+.modal-close{position:absolute;top:.9rem;right:.9rem;background:none;border:none;color:rgba(255,255,255,.5);font-size:1.1rem;cursor:pointer;padding:.3rem .5rem;border-radius:2px;transition:color .2s}
+.modal-close:hover{color:#fff}
+.modal-bd{padding:1.75rem 2rem}
+.modal-tabs{display:flex;border-bottom:1.5px solid var(--sand-dark);margin-bottom:1.5rem}
+.mtab{flex:1;background:none;border:none;padding:.55rem;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-muted);border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .2s}
+.mtab.active{color:var(--clay);border-bottom-color:var(--clay);font-weight:500}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.field{margin-bottom:.9rem}
+.field label{display:block;font-size:.72rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:.35rem}
+.field input{width:100%;padding:.65rem 1rem;border:1.5px solid var(--sand-dark);border-radius:2px;outline:none;font-family:'DM Sans',sans-serif;font-size:.9rem;background:var(--sand);color:var(--ink);transition:border-color .2s,background .2s}
+.field input:focus{border-color:var(--clay);background:var(--white)}
+.btn-full{width:100%;padding:.8rem;background:var(--clay);color:#fff;border:none;border-radius:2px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;transition:background .2s,transform .1s;margin-top:.25rem}
+.btn-full:hover{background:var(--clay-dark)}
+.btn-full:active{transform:scale(.99)}
+.or-div{text-align:center;margin:.85rem 0;font-size:.75rem;color:var(--ink-muted);letter-spacing:.05em;position:relative}
+.or-div::before,.or-div::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:var(--sand-dark)}
+.or-div::before{left:0}.or-div::after{right:0}
+.btn-ggl{width:100%;padding:.72rem;background:var(--white);color:var(--ink-mid);border:1.5px solid var(--sand-dark);border-radius:2px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:border-color .2s,background .2s}
+.btn-ggl:hover{border-color:var(--clay);background:var(--sand)}
+.btn-ggl svg{width:17px;height:17px;flex-shrink:0}
+.modal-foot{text-align:center;padding:0 2rem 1.5rem;font-size:.78rem;color:var(--ink-muted)}
+.modal-foot a{color:var(--clay);cursor:pointer;text-decoration:none;border-bottom:1px solid currentColor}
+
+/* ══ HEADER ══ */
+header{position:sticky;top:0;z-index:800;background:var(--clay-dark)}
+.hdr{max-width:1280px;margin:0 auto;padding:0 2rem;height:62px;display:flex;align-items:center;gap:1.25rem}
+.logo{display:flex;align-items:center;gap:.7rem;cursor:pointer;flex-shrink:0;text-decoration:none}
+.logo-icon{width:38px;height:38px;flex-shrink:0}
+.logo-words .brand{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:#fff;letter-spacing:.02em;line-height:1}
+.logo-words .sub{font-size:.6rem;font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--clay-pale);margin-top:.1rem}
+.hdr-search{flex:1;max-width:340px;margin-left:auto}
+.srch{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:2px;padding:.4rem .85rem;transition:background .2s,border-color .2s}
+.srch:focus-within{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4)}
+.srch input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:.85rem;color:#fff;width:100%}
+.srch input::placeholder{color:rgba(255,255,255,.45)}
+.srch svg{color:rgba(255,255,255,.5);flex-shrink:0;width:14px;height:14px}
+.hdr-actions{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+.btn-login{background:var(--gold);color:var(--ink);border:none;border-radius:2px;cursor:pointer;padding:.42rem 1.15rem;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;transition:background .2s;white-space:nowrap}
+.btn-login:hover{background:var(--gold-light)}
+.btn-usr{display:none;align-items:center;gap:.45rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:2px;padding:.38rem .85rem;cursor:pointer;color:#fff;font-family:'DM Sans',sans-serif;font-size:.8rem;transition:background .2s}
+.btn-usr:hover{background:rgba(255,255,255,.18)}
+.btn-usr.show{display:flex}
+.avatar{width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;flex-shrink:0}
+
+/* ══ SUBNAV ══ */
+.subnav{background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06)}
+.subnav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;display:flex;overflow-x:auto}
+.subnav-inner::-webkit-scrollbar{display:none}
+.nav-btn{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;padding:.7rem 1.15rem;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.nav-btn:hover{color:rgba(255,255,255,.85)}
+.nav-btn.active{color:var(--gold-light);border-bottom-color:var(--gold)}
+
+/* ══ PAGES ══ */
+.page{display:none}.page.active{display:block}
+
+/* ══ HERO ══ */
+.hero{position:relative;min-height:500px;display:flex;align-items:flex-end;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1400&q=80') center/cover no-repeat}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,rgba(28,16,8,.9) 38%,rgba(28,16,8,.35) 100%)}
+.hero-ct{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:4rem 2rem;width:100%}
+.hero-tag{display:inline-block;border:1px solid var(--gold);color:var(--gold-light);font-size:.68rem;font-weight:400;letter-spacing:.15em;text-transform:uppercase;padding:.28rem .85rem;border-radius:1px;margin-bottom:1.15rem}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4.5vw,3.6rem);font-weight:400;color:#fff;line-height:1.1;max-width:540px;margin-bottom:1.15rem}
+.hero h1 em{font-style:italic;color:var(--clay-pale)}
+.hero-sub{font-size:.95rem;font-weight:300;line-height:1.75;color:rgba(255,255,255,.7);max-width:440px;margin-bottom:2rem}
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap}
+.btn-cta{background:var(--clay);color:#fff;border:none;border-radius:2px;cursor:pointer;padding:.75rem 1.85rem;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;transition:background .2s}
+.btn-cta:hover{background:var(--clay-dark)}
+.btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:2px;cursor:pointer;padding:.75rem 1.85rem;font-family:'DM Sans',sans-serif;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;transition:border-color .2s,background .2s}
+.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.07)}
+
+/* ══ WEEK STRIP ══ */
+.wstrip{background:var(--clay-dark)}
+.wstrip-in{max-width:1280px;margin:0 auto;padding:1.25rem 2rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.wlabel{font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);flex-shrink:0;border-right:1px solid rgba(255,255,255,.15);padding-right:2rem}
+.wtitle{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#fff}
+.wdesc{font-size:.82rem;font-weight:300;color:rgba(255,255,255,.6);margin-top:.1rem}
+.wcta{margin-left:auto;flex-shrink:0;background:var(--gold);color:var(--ink);border:none;border-radius:2px;cursor:pointer;padding:.5rem 1.35rem;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;transition:background .2s}
+.wcta:hover{background:var(--gold-light)}
+
+/* ══ SECTIONS ══ */
+.sec{max-width:1280px;margin:0 auto;padding:3.5rem 2rem}
+.sec-hd{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--sand-dark);padding-bottom:.9rem;margin-bottom:2rem}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:700;color:var(--ink)}
+.sec-link{font-size:.72rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--clay);background:none;border:none;border-bottom:1px solid currentColor;padding-bottom:1px;cursor:pointer;white-space:nowrap;transition:color .2s}
+.sec-link:hover{color:var(--clay-dark)}
+
+/* ══ CARDS ══ */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:1.5rem}
+.card{background:var(--white);border:1px solid var(--sand-dark);border-radius:2px;overflow:hidden;cursor:pointer;transition:transform .22s,box-shadow .22s}
+.card:hover{transform:translateY(-5px);box-shadow:0 14px 36px rgba(28,16,8,.11)}
+.card-thumb{height:195px;overflow:hidden;position:relative;background:var(--sand-dark)}
+.card-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease;display:block}
+.card:hover .card-thumb img{transform:scale(1.05)}
+.ctag{position:absolute;top:.7rem;left:.7rem;background:var(--clay-dark);color:#fff;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:.22rem .65rem;border-radius:1px}
+.ccat{position:absolute;top:.7rem;right:2.6rem;background:rgba(28,16,8,.7);color:rgba(255,255,255,.9);font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;padding:.22rem .65rem;border-radius:1px}
+.cfav{position:absolute;top:.55rem;right:.55rem;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.cfav:hover{transform:scale(1.1);background:var(--white)}
+.cfav svg{width:15px;height:15px;pointer-events:none}
+.cfav.on svg{fill:var(--clay);stroke:var(--clay)}
+.cbody{padding:1.2rem 1.25rem 1.3rem}
+.cbody h4{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-weight:700;color:var(--ink);margin-bottom:.3rem;line-height:1.25}
+.cbody p{font-size:.8rem;font-weight:300;color:var(--ink-muted);line-height:1.55;margin-bottom:.85rem}
+.cmeta{display:flex;gap:.9rem;flex-wrap:wrap;font-size:.7rem;font-weight:400;letter-spacing:.04em;color:var(--ink-mid);text-transform:uppercase;border-top:1px solid var(--sand);padding-top:.7rem}
+.cmeta span{display:flex;align-items:center;gap:.3rem}
+.cmeta svg{width:12px;height:12px;color:var(--clay);flex-shrink:0}
+
+/* ══ PILLS ══ */
+.pills{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.pill{background:var(--white);color:var(--ink-mid);border:1px solid var(--sand-dark);border-radius:1px;padding:.38rem 1rem;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.74rem;font-weight:400;letter-spacing:.07em;text-transform:uppercase;transition:all .18s}
+.pill:hover{border-color:var(--clay);color:var(--clay)}
+.pill.active{background:var(--clay);border-color:var(--clay);color:#fff}
+
+/* ══ TIPS ══ */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+.tip{background:var(--white);border:1px solid var(--sand-dark);border-radius:2px;border-left:3px solid var(--clay);padding:1.5rem}
+.tip h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--ink-mid);margin-bottom:.45rem}
+.tip p{font-size:.84rem;font-weight:300;color:var(--ink-muted);line-height:1.65}
+
+/* ══ ABOUT ══ */
+.about-banner{position:relative;min-height:340px;display:flex;align-items:center;overflow:hidden;border-radius:2px;margin-bottom:2.5rem}
+.about-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1400&q=80') center/cover no-repeat}
+.about-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(28,16,8,.92) 45%,rgba(28,16,8,.35))}
+.about-txt{position:relative;z-index:2;padding:3rem;max-width:580px;color:#fff}
+.about-txt h2{font-family:'DM Serif Display',serif;font-size:2.1rem;line-height:1.15;margin-bottom:1rem}
+.about-txt p{font-size:.93rem;font-weight:300;line-height:1.8;opacity:.82}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1px;background:var(--sand-dark);border:1px solid var(--sand-dark);border-radius:2px;overflow:hidden;margin-bottom:2.5rem}
+.stat{background:var(--white);padding:2rem 1.5rem;text-align:center}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;color:var(--clay);line-height:1;margin-bottom:.2rem}
+.stat-l{font-size:.72rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)}
+
+/* ══ DETAIL ══ */
+.detail{display:none}
+.detail.active{display:block}
+.btn-back{display:inline-flex;align-items:center;gap:.4rem;background:none;border:1px solid var(--sand-dark);border-radius:2px;cursor:pointer;padding:.48rem 1.15rem;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-muted);margin:1.5rem 2rem;transition:border-color .2s,color .2s}
+.btn-back:hover{border-color:var(--clay);color:var(--clay)}
+.btn-back svg{width:13px;height:13px}
+.det-hero{position:relative;height:420px;overflow:hidden}
+.det-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.det-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,16,8,.88) 30%,transparent 70%)}
+.det-meta{position:absolute;bottom:0;left:0;right:0;padding:2rem;max-width:1280px;margin:0 auto}
+.det-eye{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);margin-bottom:.45rem}
+.det-title{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;line-height:1.1;margin-bottom:.75rem}
+.det-badges{display:flex;gap:.45rem;flex-wrap:wrap}
+.det-badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:rgba(255,255,255,.9);font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;padding:.22rem .7rem;border-radius:1px}
+.det-body{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;display:grid;grid-template-columns:1fr 1.7fr;gap:1.75rem}
+.det-box{background:var(--white);border:1px solid var(--sand-dark);border-radius:2px;padding:1.65rem}
+.det-box-hd{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--ink);padding-bottom:.7rem;border-bottom:1px solid var(--sand-dark);margin-bottom:1.15rem;letter-spacing:.03em;display:flex;align-items:center;gap:.45rem}
+.det-box-hd svg{width:17px;height:17px;color:var(--clay);flex-shrink:0}
+.ingr-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--sand);font-size:.86rem;gap:1rem}
+.ingr-row:last-child{border-bottom:none}
+.ingr-n{font-weight:300;color:var(--ink)}
+.ingr-a{font-weight:500;color:var(--clay);white-space:nowrap}
+.step-row{display:flex;gap:.9rem;margin-bottom:1.15rem}
+.step-n{min-width:28px;height:28px;border-radius:50%;background:var(--clay);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:500;margin-top:2px;flex-shrink:0}
+.step-t{font-size:.88rem;font-weight:300;line-height:1.7;color:var(--ink)}
+.print-note{background:var(--sand);border:1px solid var(--sand-dark);border-radius:2px;padding:1rem 1.25rem;font-size:.8rem;font-weight:300;color:var(--ink-muted);margin-top:1.5rem;line-height:1.6}
+.print-note strong{font-weight:500;color:var(--ink-mid)}
+
+/* ══ FAVORITES EMPTY ══ */
+.empty{text-align:center;padding:5rem 2rem;max-width:380px;margin:0 auto}
+.empty-ico{width:60px;height:60px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem}
+.empty-ico svg{width:26px;height:26px;color:var(--clay)}
+.empty h3{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+.empty p{font-size:.84rem;font-weight:300;color:var(--ink-muted);line-height:1.65}
+
+/* ══ FOOTER ══ */
+footer{background:var(--ink);color:rgba(255,255,255,.45);padding:2.5rem 2rem;margin-top:4rem}
+.foot-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.foot-logo{display:flex;align-items:center;gap:.65rem}
+.foot-logo svg{width:30px;height:30px}
+.foot-logo span{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:rgba(255,255,255,.8);letter-spacing:.02em}
+.foot-links{display:flex;gap:1.5rem;flex-wrap:wrap}
+.foot-links button{background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.35);transition:color .2s}
+.foot-links button:hover{color:rgba(255,255,255,.7)}
+.foot-copy{font-size:.74rem;font-weight:300;width:100%;text-align:center;border-top:1px solid rgba(255,255,255,.07);padding-top:1.5rem;margin-top:.5rem}
+.foot-copy strong{color:var(--gold-light);font-weight:400}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink);color:#fff;padding:.65rem 1.4rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:300;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:9999;border-left:3px solid var(--clay);white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:900px){
+  .det-body{grid-template-columns:1fr}
+  .wlabel{display:none}
+}
+@media(max-width:640px){
+  .hdr{padding:0 1rem}
+  .hdr-search{display:none}
+  .hero-ct{padding:2.5rem 1.25rem}
+  .sec{padding:2.5rem 1.25rem}
+  .wstrip-in{gap:1rem}
+  .wcta{margin-left:0}
+  .about-txt{padding:2rem 1.25rem}
+  .det-hero{height:300px}
+  .det-meta{padding:1.25rem}
+  .det-body{padding:1.5rem 1.25rem}
+  .btn-back{margin:1rem 1.25rem}
+  .foot-in{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ MODAL ══ -->
+<div class="overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <button class="modal-close" onclick="closeAuth()" aria-label="Fechar">&#x2715;</button>
+      <div class="modal-hd-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="20" fill="#C8902A"/>
+          <path d="M20 6C11 6 9 13 9 21C9 28 13.9 34 20 34C26.1 34 31 28 31 21C31 13 29 6 20 6Z" fill="#7A2E0E"/>
+          <path d="M20 10C14 10 12 16 12 22C12 27 15.6 31 20 31C24.4 31 28 27 28 22C28 16 26 10 20 10Z" fill="#F5ECD9"/>
+          <path d="M16.5 22Q20 16 23.5 22Q20 30 16.5 22Z" fill="#B84A1E"/>
+          <rect x="19" y="4" width="2" height="5" rx="1" fill="#E8B84A"/>
+          <rect x="12.5" y="6.5" width="2" height="4.5" rx="1" fill="#E8B84A" transform="rotate(-35 13.5 8.5)"/>
+          <rect x="25.5" y="6.5" width="2" height="4.5" rx="1" fill="#E8B84A" transform="rotate(35 26.5 8.5)"/>
+        </svg>
+      </div>
+      <h2>Oxente Receitas</h2>
+      <p>Culinária Nordestina</p>
+    </div>
+    <div class="modal-bd">
+      <div class="modal-tabs">
+        <button class="mtab active" onclick="switchTab('login')">Entrar</button>
+        <button class="mtab" onclick="switchTab('register')">Cadastrar-se</button>
+      </div>
+      <div class="tab-pane active" id="pane-login">
+        <div class="field"><label>E-mail</label><input type="email" id="loginEmail" placeholder="voce@email.com"></div>
+        <div class="field"><label>Senha</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+        <button class="btn-full" onclick="doLogin()">Entrar na plataforma</button>
+        <div class="or-div">ou</div>
+        <button class="btn-ggl" onclick="doGoogle()">
+          <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.706A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+          Continuar com Google
+        </button>
+      </div>
+      <div class="tab-pane" id="pane-register">
+        <div class="field"><label>Nome completo</label><input type="text" id="regName" placeholder="Maria Aparecida Silva"></div>
+        <div class="field"><label>E-mail</label><input type="email" id="regEmail" placeholder="voce@email.com"></div>
+        <div class="field"><label>Senha</label><input type="password" id="regPass" placeholder="Mín. 8 caracteres"></div>
+        <button class="btn-full" onclick="doRegister()">Criar conta gratuita</button>
+      </div>
+    </div>
+    <div class="modal-foot">Ao continuar, você concorda com os <a>Termos de Uso</a> e a <a>Política de Privacidade</a></div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="hdr">
+    <div class="logo" onclick="goPage('inicio')">
+      <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="20" fill="#C8902A"/>
+        <path d="M20 6C11 6 9 13 9 21C9 28 13.9 34 20 34C26.1 34 31 28 31 21C31 13 29 6 20 6Z" fill="#7A2E0E"/>
+        <path d="M20 10C14 10 12 16 12 22C12 27 15.6 31 20 31C24.4 31 28 27 28 22C28 16 26 10 20 10Z" fill="#F5ECD9"/>
+        <path d="M16.5 22Q20 16 23.5 22Q20 30 16.5 22Z" fill="#B84A1E"/>
+        <rect x="19" y="4" width="2" height="5" rx="1" fill="#E8B84A"/>
+        <rect x="12.5" y="6.5" width="2" height="4.5" rx="1" fill="#E8B84A" transform="rotate(-35 13.5 8.5)"/>
+        <rect x="25.5" y="6.5" width="2" height="4.5" rx="1" fill="#E8B84A" transform="rotate(35 26.5 8.5)"/>
+      </svg>
+      <div class="logo-words">
+        <div class="brand">Oxente Receitas</div>
+        <div class="sub">Culinária Nordestina</div>
+      </div>
+    </div>
+
+    <div class="hdr-search">
+      <div class="srch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar receitas, ingredientes..." oninput="onSearch(this.value)">
+      </div>
+    </div>
+
+    <div class="hdr-actions">
+      <button class="btn-login" id="btnLogin" onclick="openAuth()">Entrar</button>
+      <button class="btn-usr" id="btnUser" onclick="doLogout()">
+        <div class="avatar" id="userAvatar">M</div>
+        <span id="userName">Usuário</span>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ══ SUBNAV ══ -->
+<nav class="subnav" role="navigation" aria-label="Menu principal">
+  <div class="subnav-inner">
+    <button class="nav-btn active" onclick="goPage('inicio')">Início</button>
+    <button class="nav-btn" onclick="goPage('receitas')">Receitas</button>
+    <button class="nav-btn" onclick="goPage('favoritos')">Favoritos</button>
+    <button class="nav-btn" onclick="goPage('dicas')">Dicas &amp; Técnicas</button>
+    <button class="nav-btn" onclick="goPage('sobre')">Sobre</button>
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main>
+
+  <!-- DETAIL VIEW -->
+  <div class="detail" id="detailView">
+    <button class="btn-back" onclick="closeDetail()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+      Voltar às receitas
+    </button>
+    <div id="detailContent"></div>
+  </div>
+
+  <!-- INÍCIO -->
+  <div class="page active" id="page-inicio">
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-ct">
+        <div class="hero-tag">Culinária Tradicional Nordestina</div>
+        <h1>Do sertão para <em>a sua mesa</em></h1>
+        <p class="hero-sub">Receitas autênticas com a sabedoria das cozinheiras nordestinas. Cada prato carrega história, afeto e muito tempero.</p>
+        <div class="hero-btns">
+          <button class="btn-cta" onclick="goPage('receitas')">Explorar receitas</button>
+          <button class="btn-ghost" onclick="goPage('sobre')">Nossa história</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wstrip">
+      <div class="wstrip-in">
+        <span class="wlabel">Receita da Semana</span>
+        <div>
+          <div class="wtitle">Baião de Dois</div>
+          <div class="wdesc">O prato símbolo do sertão cearense — cremoso, robusto e reconfortante</div>
+        </div>
+        <button class="wcta" onclick="openRecipe(1)">Ver preparo completo</button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-hd">
+        <h2 class="sec-title">Receitas em destaque</h2>
+        <button class="sec-link" onclick="goPage('receitas')">Ver todas as receitas</button>
+      </div>
+      <div class="grid" id="homeGrid"></div>
+    </div>
+
+    <div style="background:var(--sand);padding:3rem 0;margin-bottom:0">
+      <div class="sec" style="padding-top:0;padding-bottom:0">
+        <div class="sec-hd">
+          <h2 class="sec-title">Dicas rápidas</h2>
+          <button class="sec-link" onclick="goPage('dicas')">Todas as dicas</button>
+        </div>
+        <div class="tips-grid">
+          <div class="tip"><h4>Manteiga de garrafa</h4><p>Substitua o azeite comum pela manteiga de garrafa nordestina para um sabor autêntico. Ela suporta altas temperaturas sem queimar.</p></div>
+          <div class="tip"><h4>Dessalgando a carne de sol</h4><p>Mergulhe em água fria e troque a cada 30 minutos por 2 horas. O ponto ideal é quando a carne ainda mantém um leve sabor.</p></div>
+          <div class="tip"><h4>O segredo do coentro</h4><p>Adicione sempre ao final do preparo e fora do fogo. O calor excessivo elimina o aroma e o sabor característico da erva.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECEITAS -->
+  <div class="page" id="page-receitas">
+    <div class="sec">
+      <div class="sec-hd"><h2 class="sec-title">Todas as receitas</h2></div>
+      <div class="pills">
+        <button class="pill active" onclick="filterCat(this,'all')">Todas</button>
+        <button class="pill" onclick="filterCat(this,'prato')">Pratos principais</button>
+        <button class="pill" onclick="filterCat(this,'sobremesa')">Sobremesas</button>
+        <button class="pill" onclick="filterCat(this,'bebida')">Bebidas</button>
+        <button class="pill" onclick="filterCat(this,'lanche')">Lanches</button>
+      </div>
+      <div class="grid" id="recipesGrid"></div>
+    </div>
+  </div>
+
+  <!-- FAVORITOS -->
+  <div class="page" id="page-favoritos">
+    <div class="sec">
+      <div class="sec-hd"><h2 class="sec-title">Meus favoritos</h2></div>
+      <div id="favsContent"></div>
+    </div>
+  </div>
+
+  <!-- DICAS -->
+  <div class="page" id="page-dicas">
+    <div class="sec">
+      <div class="sec-hd"><h2 class="sec-title">Dicas &amp; Técnicas</h2></div>
+      <div class="tips-grid">
+        <div class="tip"><h4>Temperos essenciais do nordeste</h4><p>Coentro, cominho, colorau e alho formam a base aromática de quase todos os pratos. A generosidade no tempero é uma marca da culinária regional.</p></div>
+        <div class="tip"><h4>O segredo do feijão-verde</h4><p>Deixe de molho por ao menos oito horas. Cozinhe com folha de louro em fogo baixo e descarte a água do molho para um resultado mais leve e digerível.</p></div>
+        <div class="tip"><h4>Como dessalgar a carne de sol</h4><p>Submirja em água por duas horas, trocando a cada trinta minutos. Finalize sempre na manteiga de garrafa — ela realça o sabor como nenhuma outra gordura.</p></div>
+        <div class="tip"><h4>Milho no ponto certo</h4><p>Para canjica e pamonha, o milho deve estar no ponto de leite: nem duro nem maduro demais. Teste quebrando um grão — deve soltar um líquido branco leitoso.</p></div>
+        <div class="tip"><h4>Queijo coalho na brasa</h4><p>Utilize queijo coalho artesanal e grelhe em fogo alto e rápido, selando a superfície para manter o interior macio e o exterior dourado e levemente crocante.</p></div>
+        <div class="tip"><h4>Tapioca no ponto perfeito</h4><p>Peneire a goma até obter grãos completamente secos. A frigideira deve estar seca e em fogo médio — a tapioca deve se firmar sem dourar ou ressecar.</p></div>
+        <div class="tip"><h4>Manteiga de garrafa vs. manteiga comum</h4><p>A manteiga de garrafa é clarificada e tem ponto de fumaça mais alto. Use para refogar e grelhar. A manteiga comum vai bem em finalização e sobremesas.</p></div>
+        <div class="tip"><h4>Pirão de peixe</h4><p>Farinhe o caldo do peixe aos poucos, mexendo sempre em fogo baixo. O ponto ideal é quando o pirão solta do fundo da panela e fica com consistência cremosa.</p></div>
+        <div class="tip"><h4>Conservando o coalho</h4><p>Queijo coalho artesanal deve ser conservado envolto em pano de algodão na geladeira. Evite plástico — ele precisa respirar para não desenvolver sabor amargo.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <div class="page" id="page-sobre">
+    <div class="sec">
+      <div class="about-banner">
+        <div class="about-bg"></div>
+        <div class="about-txt">
+          <h2>Preservando a memória da cozinha nordestina</h2>
+          <p>O Oxente Receitas nasceu da vontade de guardar e compartilhar a sabedoria culinária do Nordeste — receitas passadas de geração em geração, carregadas de história, afeto e identidade cultural.</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">200+</div><div class="stat-l">Receitas catalogadas</div></div>
+        <div class="stat"><div class="stat-n">9</div><div class="stat-l">Estados representados</div></div>
+        <div class="stat"><div class="stat-n">50 mil</div><div class="stat-l">Cozinheiros ativos</div></div>
+        <div class="stat"><div class="stat-n">12</div><div class="stat-l">Anos de história</div></div>
+      </div>
+      <div class="tips-grid">
+        <div class="tip" style="border-left-color:var(--gold)"><h4>Nossa missão</h4><p>Democratizar o acesso às receitas tradicionais do Nordeste, preservando técnicas e ingredientes que contam a história de um povo e de sua cultura alimentar.</p></div>
+        <div class="tip" style="border-left-color:var(--gold)"><h4>Comunidade</h4><p>Uma rede de cozinheiros apaixonados — de donas de casa a chefs profissionais — comprometidos com a autenticidade e a qualidade da culinária nordestina.</p></div>
+        <div class="tip" style="border-left-color:var(--gold)"><h4>Curadoria rigorosa</h4><p>Cada receita passa pela revisão de cozinheiras tradicionais antes de ser publicada. Qualidade, autenticidade e respeito à tradição não são negociáveis aqui.</p></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-logo">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="20" fill="#C8902A"/>
+        <path d="M20 6C11 6 9 13 9 21C9 28 13.9 34 20 34C26.1 34 31 28 31 21C31 13 29 6 20 6Z" fill="#7A2E0E"/>
+        <path d="M20 10C14 10 12 16 12 22C12 27 15.6 31 20 31C24.4 31 28 27 28 22C28 16 26 10 20 10Z" fill="#F5ECD9"/>
+        <path d="M16.5 22Q20 16 23.5 22Q20 30 16.5 22Z" fill="#B84A1E"/>
+      </svg>
+      <span>Oxente Receitas</span>
+    </div>
+    <div class="foot-links">
+      <button onclick="goPage('receitas')">Receitas</button>
+      <button onclick="goPage('dicas')">Dicas</button>
+      <button onclick="goPage('sobre')">Sobre</button>
+      <button onclick="openAuth()">Entrar</button>
+    </div>
+    <div class="foot-copy">Culinária nordestina preservada com <strong>respeito e afeto</strong> &mdash; do sertão para o mundo &copy; 2025 Oxente Receitas</div>
+  </div>
+</footer>
+
+<script>
+/* ════ DATA ════ */
+const RECIPES = [
+  {
+    id:1, cat:'prato', region:'Ceará · Piauí',
+    name:'Baião de Dois',
+    desc:'A combinação clássica de arroz e feijão-verde com queijo coalho e carne de sol — prato símbolo do sertão nordestino.',
+    img:'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80',
+    imgLg:'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=1200&q=80',
+    time:'45 min', serves:'6 pessoas', diff:'Fácil',
+    ingredients:[
+      {n:'Feijão-verde cozido',a:'2 xícaras'},
+      {n:'Arroz agulhinha',a:'2 xícaras'},
+      {n:'Queijo coalho em cubos',a:'200 g'},
+      {n:'Carne de sol desfiada',a:'300 g'},
+      {n:'Manteiga de garrafa',a:'3 col. sopa'},
+      {n:'Cebola picada',a:'1 unidade'},
+      {n:'Alho amassado',a:'3 dentes'},
+      {n:'Coentro fresco',a:'a gosto'},
+      {n:'Sal e pimenta-do-reino',a:'a gosto'},
+    ],
+    steps:[
+      'Refogue a cebola e o alho na manteiga de garrafa até dourarem completamente, em fogo médio.',
+      'Adicione a carne de sol desfiada e refogue por cinco minutos, misturando bem.',
+      'Acrescente o arroz e mexa, deixando-o tostar levemente por dois minutos para absorver o sabor.',
+      'Junte o feijão-verde com parte do caldo e incorpore delicadamente com uma colher de pau.',
+      'Adicione água quente suficiente para cobrir, tampe a panela e cozinhe por vinte minutos em fogo baixo.',
+      'Nos últimos cinco minutos, adicione o queijo coalho em cubos. Finalize com coentro e ajuste o sal.'
+    ]
+  },
+  {
+    id:2, cat:'prato', region:'Rio Grande do Norte · Paraíba',
+    name:'Carne de Sol Grelhada',
+    desc:'Carne dourada na manteiga de garrafa, suculenta por dentro e com casca dourada por fora — simplicidade que impressiona.',
+    img:'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80',
+    imgLg:'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80',
+    time:'30 min', serves:'4 pessoas', diff:'Fácil',
+    ingredients:[
+      {n:'Carne de sol (contrafilé)',a:'800 g'},
+      {n:'Manteiga de garrafa',a:'4 col. sopa'},
+      {n:'Alho amassado',a:'4 dentes'},
+      {n:'Pimentão verde',a:'½ unidade'},
+      {n:'Cebola-roxa em rodelas',a:'1 grande'},
+      {n:'Coentro fresco',a:'a gosto'},
+    ],
+    steps:[
+      'Dessalgue a carne em água fria por duas horas, trocando a cada trinta minutos.',
+      'Seque bem com papel-toalha e corte em bifes generosos de aproximadamente dois centímetros.',
+      'Aqueça uma frigideira de ferro em fogo alto e derreta a manteiga de garrafa.',
+      'Grelhe os bifes por quatro minutos de cada lado até formar uma crosta dourada e uniforme.',
+      'Na mesma gordura, refogue alho, cebola e pimentão. Disponha sobre a carne e finalize com coentro fresco.',
+    ]
+  },
+  {
+    id:3, cat:'sobremesa', region:'Todo o Nordeste',
+    name:'Canjica com Leite de Coco',
+    desc:'Doce cremoso de milho branco perfumado com canela e cravo, finalizado com amendoim torrado — presença obrigatória nas festas juninas.',
+    img:'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80',
+    imgLg:'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=1200&q=80',
+    time:'1h 20 min', serves:'8 pessoas', diff:'Médio',
+    ingredients:[
+      {n:'Milho de canjica branca',a:'500 g'},
+      {n:'Leite de coco integral',a:'400 ml'},
+      {n:'Leite integral',a:'1 litro'},
+      {n:'Açúcar refinado',a:'1 xícara'},
+      {n:'Canela em pau',a:'2 unidades'},
+      {n:'Cravo-da-índia',a:'4 unidades'},
+      {n:'Amendoim torrado e pelado',a:'1 xícara'},
+    ],
+    steps:[
+      'Deixe a canjica de molho em água fria por oito horas. Escorra e lave muito bem.',
+      'Cozinhe na panela de pressão com água por trinta minutos. Escorra o excesso de água.',
+      'Leve ao fogo com o leite integral, as paus de canela e os cravos, mexendo continuamente.',
+      'Quando ferver, acrescente o açúcar e o leite de coco. Reduza para fogo baixo.',
+      'Cozinhe por mais vinte minutos, mexendo com frequência, até adquirir consistência cremosa. Adicione o amendoim e sirva.',
+    ]
+  },
+  {
+    id:4, cat:'bebida', region:'Bahia · Pernambuco · Sergipe',
+    name:'Suco de Umbu Natural',
+    desc:'A fruta nativa do semiárido em seu estado mais puro — refresco com sabor único entre o ácido e o adocicado.',
+    img:'https://images.unsplash.com/photo-1546173159-315724a31696?w=600&q=80',
+    imgLg:'https://images.unsplash.com/photo-1546173159-315724a31696?w=1200&q=80',
+    time:'15 min', serves:'4 copos', diff:'Fácil',
+    ingredients:[
+      {n:'Umbu maduro',a:'500 g'},
+      {n:'Água filtrada gelada',a:'500 ml'},
+      {n:'Açúcar ou mel',a:'a gosto'},
+      {n:'Gelo',a:'a gosto'},
+    ],
+    steps:[
+      'Lave os umbus em água corrente e retire o caroço com cuidado.',
+      'Bata a polpa no liquidificador com a água gelada e o adoçante por dois minutos.',
+      'Coe em peneira fina pressionando a polpa para extrair o máximo de suco.',
+      'Sirva imediatamente sobre bastante gelo para preservar o sabor.',
+    ]
+  },
+  {
+    id:5, cat:'lanche', region:'Todo o Nordeste',
+    name:'Tapioca com Queijo e Carne',
+    desc:'A goma fresca estaladiça com queijo coalho derretido e carne de sol desfiada — o café da manhã mais nordestino que existe.',
+    img:'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&q=80',
+    imgLg:'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=1200&q=80',
+    time:'20 min', serves:'2 unidades', diff:'Fácil',
+    ingredients:[
+      {n:'Goma de tapioca hidratada',a:'4 col. sopa'},
+      {n:'Queijo coalho ralado',a:'100 g'},
+      {n:'Carne de sol desfiada',a:'100 g'},
+      {n:'Manteiga',a:'1 col. café'},
+      {n:'Coentro picado',a:'a gosto'},
+    ],
+    steps:[
+      'Peneire a goma até obter grãos completamente finos e secos, sem grumos.',
+      'Aqueça uma frigideira antiaderente em fogo médio sem qualquer gordura.',
+      'Distribua a goma formando um disco uniforme de vinte centímetros. Aguarde firmar por dois minutos.',
+      'Adicione o recheio em metade do disco, dobre ao meio com cuidado e sirva imediatamente.',
+    ]
+  },
+  {
+    id:6, cat:'prato', region:'Alagoas · Sergipe · Bahia',
+    name:'Moqueca Nordestina de Peixe',
+    desc:'Peixe fresco cozido no leite de coco com azeite de dendê e coentro — a fusão entre o litoral e o interior nordestino.',
+    img:'https://images.unsplash.com/photo-1559847844-5315695dadae?w=600&q=80',
+    imgLg:'https://images.unsplash.com/photo-1559847844-5315695dadae?w=1200&q=80',
+    time:'40 min', serves:'4 pessoas', diff:'Médio',
+    ingredients:[
+      {n:'Filé de peixe (robalo ou tilápia)',a:'800 g'},
+      {n:'Leite de coco integral',a:'200 ml'},
+      {n:'Tomates maduros em cubos',a:'2 unidades'},
+      {n:'Pimentão amarelo em tiras',a:'1 unidade'},
+      {n:'Cebola picada',a:'1 grande'},
+      {n:'Azeite de dendê',a:'2 col. sopa'},
+      {n:'Alho amassado',a:'3 dentes'},
+      {n:'Coentro fresco',a:'a gosto'},
+      {n:'Suco de limão',a:'1 unidade'},
+    ],
+    steps:[
+      'Marine o peixe com o suco de limão, alho, sal e coentro por trinta minutos sob refrigeração.',
+      'Em uma panela de barro ou fundo grosso, refogue cebola, tomate e pimentão no azeite de dendê por cinco minutos.',
+      'Disponha os filés de peixe marinados sobre o refogado sem mexer.',
+      'Despeje o leite de coco sobre o peixe, tampe a panela e cozinhe em fogo baixo por vinte minutos.',
+      'Finalize com coentro fresco abundante e sirva com arroz branco e pirão.',
+    ]
+  },
+];
+
+/* ════ ICONS ════ */
+const ICO_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+const ICO_USR   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
+const ICO_STAR  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const ICO_HRT_E = `<svg viewBox="0 0 24 24" fill="none" stroke="var(--clay)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+const ICO_HRT_F = `<svg viewBox="0 0 24 24" fill="var(--clay)" stroke="var(--clay)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+const ICO_INGR  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`;
+const ICO_CHEF  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>`;
+const ICO_BACK  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>`;
+const ICO_LOCK  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+const ICO_HEART = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+
+/* ════ STATE ════ */
+let user = null;
+let favs = new Set();
+let curPage = 'inicio';
+
+/* ════ CARD ════ */
+function makeCard(r){
+  const on = favs.has(r.id);
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    <div class="card-thumb">
+      <img src="${r.img}" alt="${r.name}" loading="lazy">
+      <span class="ctag">${r.region}</span>
+      <span class="ccat">${r.cat==='prato'?'Prato':r.cat==='sobremesa'?'Sobremesa':r.cat==='bebida'?'Bebida':'Lanche'}</span>
+      <button class="cfav${on?' on':''}" data-id="${r.id}" aria-label="Favoritar receita">${on?ICO_HRT_F:ICO_HRT_E}</button>
+    </div>
+    <div class="cbody">
+      <h4>${r.name}</h4>
+      <p>${r.desc}</p>
+      <div class="cmeta">
+        <span>${ICO_CLOCK}${r.time}</span>
+        <span>${ICO_USR}${r.serves}</span>
+        <span>${ICO_STAR}${r.diff}</span>
+      </div>
+    </div>`;
+  el.querySelector('.cfav').addEventListener('click',e=>{e.stopPropagation();toggleFav(r.id);});
+  el.querySelector('.cbody').addEventListener('click',()=>openRecipe(r.id));
+  el.querySelector('h4').addEventListener('click',()=>openRecipe(r.id));
+  return el;
+}
+
+function renderGrid(el, list){
+  el.innerHTML='';
+  if(!list.length){el.innerHTML='<p style="color:var(--ink-muted);font-size:.9rem;font-weight:300;padding:1rem 0">Nenhuma receita encontrada.</p>';return;}
+  list.forEach(r=>el.appendChild(makeCard(r)));
+}
+
+function refreshAll(){
+  renderGrid(document.getElementById('homeGrid'), RECIPES.slice(0,3));
+  renderGrid(document.getElementById('recipesGrid'), RECIPES);
+}
+
+/* ════ NAVIGATION ════ */
+function goPage(p){
+  curPage = p;
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const idx = {inicio:0,receitas:1,favoritos:2,dicas:3,sobre:4};
+  if(idx[p]!==undefined) document.querySelectorAll('.nav-btn')[idx[p]].classList.add('active');
+  document.getElementById('detailView').classList.remove('active');
+  if(p==='favoritos') renderFavs();
+  if(p==='receitas') refreshAll();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ════ SEARCH ════ */
+function onSearch(v){
+  if(!v.trim()){refreshAll();return;}
+  goPage('receitas');
+  const q=v.toLowerCase();
+  const list=RECIPES.filter(r=>r.name.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)||r.region.toLowerCase().includes(q));
+  renderGrid(document.getElementById('recipesGrid'),list);
+}
+
+/* ════ FILTER ════ */
+function filterCat(btn,cat){
+  document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid(document.getElementById('recipesGrid'), cat==='all'?RECIPES:RECIPES.filter(r=>r.cat===cat));
+}
+
+/* ════ RECIPE DETAIL ════ */
+function openRecipe(id){
+  const r = RECIPES.find(x=>x.id===id);
+  if(!r) return;
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  const dv = document.getElementById('detailView');
+  dv.classList.add('active');
+  document.getElementById('detailContent').innerHTML=`
+    <div class="det-hero">
+      <img src="${r.imgLg}" alt="${r.name}">
+      <div class="det-overlay"></div>
+      <div class="det-meta">
+        <div class="det-eye">${r.region}</div>
+        <div class="det-title">${r.name}</div>
+        <div class="det-badges">
+          <span class="det-badge">${r.time}</span>
+          <span class="det-badge">${r.serves}</span>
+          <span class="det-badge">${r.diff}</span>
+          <span class="det-badge">${r.cat==='prato'?'Prato principal':r.cat==='sobremesa'?'Sobremesa':r.cat==='bebida'?'Bebida':'Lanche'}</span>
+        </div>
+      </div>
+    </div>
+    <div class="det-body">
+      <div class="det-box">
+        <div class="det-box-hd">${ICO_INGR}Ingredientes</div>
+        ${r.ingredients.map(i=>`<div class="ingr-row"><span class="ingr-n">${i.n}</span><span class="ingr-a">${i.a}</span></div>`).join('')}
+        <div class="print-note"><strong>Dica:</strong> Os ingredientes são para ${r.serves}. Ajuste proporcionalmente se necessário.</div>
+      </div>
+      <div class="det-box">
+        <div class="det-box-hd">${ICO_CHEF}Modo de preparo</div>
+        ${r.steps.map((s,i)=>`<div class="step-row"><div class="step-n">${i+1}</div><div class="step-t">${s}</div></div>`).join('')}
+      </div>
+    </div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function closeDetail(){
+  document.getElementById('detailView').classList.remove('active');
+  goPage(['inicio','receitas'].includes(curPage)?curPage:'receitas');
+}
+
+/* ════ FAVORITES ════ */
+function toggleFav(id){
+  if(!user){openAuth();return;}
+  favs.has(id)?favs.delete(id):favs.add(id);
+  toast(favs.has(id)?'Receita adicionada aos favoritos':'Receita removida dos favoritos');
+  refreshAll();
+  if(curPage==='favoritos') renderFavs();
+}
+
+function renderFavs(){
+  const c=document.getElementById('favsContent');
+  if(!user){
+    c.innerHTML=`<div class="empty"><div class="empty-ico">${ICO_LOCK}</div><h3>Acesso restrito</h3><p>Faça login para salvar e acessar suas receitas favoritas a qualquer momento.</p></div>`;
+    return;
+  }
+  if(!favs.size){
+    c.innerHTML=`<div class="empty"><div class="empty-ico">${ICO_HEART}</div><h3>Nenhum favorito ainda</h3><p>Explore as receitas e clique no ícone de coração para salvá-las aqui.</p></div>`;
+    return;
+  }
+  c.innerHTML='';
+  const g=document.createElement('div');g.className='grid';
+  RECIPES.filter(r=>favs.has(r.id)).forEach(r=>g.appendChild(makeCard(r)));
+  c.appendChild(g);
+}
+
+/* ════ AUTH ════ */
+function openAuth(){document.getElementById('authModal').classList.add('open');}
+function closeAuth(){document.getElementById('authModal').classList.remove('open');}
+
+function switchTab(t){
+  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.mtab')[t==='login'?0:1].classList.add('active');
+  document.getElementById('pane-'+t).classList.add('active');
+}
+
+function doLogin(){
+  const e=document.getElementById('loginEmail').value.trim();
+  if(!e){toast('Informe seu e-mail para continuar');return;}
+  loginAs(e.split('@')[0]);
+}
+function doGoogle(){loginAs('Visitante');}
+function doRegister(){
+  const n=document.getElementById('regName').value.trim();
+  if(!n){toast('Informe seu nome para continuar');return;}
+  loginAs(n.split(' ')[0]);
+}
+
+function loginAs(name){
+  user=name;
+  document.getElementById('btnLogin').style.display='none';
+  document.getElementById('btnUser').classList.add('show');
+  document.getElementById('userName').textContent=name;
+  document.getElementById('userAvatar').textContent=name[0].toUpperCase();
+  closeAuth();
+  toast('Bem-vindo(a) ao Oxente Receitas, '+name);
+}
+
+function doLogout(){
+  if(!confirm('Deseja encerrar a sessão?'))return;
+  user=null;favs.clear();
+  document.getElementById('btnLogin').style.display='';
+  document.getElementById('btnUser').classList.remove('show');
+  toast('Sessão encerrada com sucesso');
+  refreshAll();
+}
+
+/* ════ TOAST ════ */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ════ CLOSE MODAL ON BG ════ */
+document.getElementById('authModal').addEventListener('click',function(e){if(e.target===this)closeAuth();});
+
+/* ════ INIT ════ */
+refreshAll();
+</script>
+</body>
+</html>
